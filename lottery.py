@@ -35,11 +35,23 @@ class lotteryDatabase:
         print(elapsed, 'seconds?')        
         return self.histBallCount
 
+    def pickDrawing(self):
+        minDraws = []
+        for i in range(69):
+            if i==0:
+                minDraws[i] = i+1
+            elif self.histBallCount[i-1] < self.histBallCount[i]:
+                minDraws.insert(i, i+1)
+            else:
+                #handle repeated or tied values
+                maxDrawValues = self.histBallCount[minDraws[-1]] 
+                indexMaxDrawValues = self.histBallCount.index(maxDrawValues)
+                minDraws.insert(indexMaxDrawValues,i+1)  
+
 def main():
     lottery = lotteryDatabase()
     tally = open('powerball.txt','r')
     tallyList = lottery.genHistDraw(tally)
-    print (len(lottery.histBallCount))
     print (lottery.histBallCount)
     draws = open('tickets.txt','r')
 '''
