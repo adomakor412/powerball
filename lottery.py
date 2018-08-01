@@ -9,9 +9,10 @@ start_time = timeit.default_timer()
 class lotteryDatabase:
     def __init__(self):       
         self.histBallCount = [0]*69
-        self.histDraw = []       
+        self.histPowerballCount = [0]*26
         self.pool = list(combinations(list(range(1,70)),5))
-        self.optPool = []#pool of undrawn numbers
+        self.optPool = [] #suggested main draws
+        self.optPowerball = [0]*26 #suggested powerballs
         self.played = []#pool of played tickets
          
     def genHistDraw(self, draws):
@@ -19,10 +20,30 @@ class lotteryDatabase:
         for line in draws:
             line = line.strip()
             date, *nums = line.split() #python 3
+            
+            powerball = int(nums[5])#tally powerball 1 through 26
+            self.histPowerballCount[powerball-1]+=1
+            
             for i in range(5):
                 ball = int(nums[i])
                 self.histBallCount[ball-1]+=1 #tally balls since 10/07/2015      
-        return self.histBallCount
+        return
+
+    def pickPowerball(self):
+            
+        tally = self.histPowerballCount
+        minPowerball = [0]*26
+        
+        for index in range(26):       
+            ballCount = min(tally)
+            minPowerball[index] = tally.index(ballCount)+1
+            tally[tally.index(ballCount)] = 1000 #place holder assuming each tally <1000
+        picks = 2
+        self.optPowerball = minPowerball[:picks]
+        while (len(self.optPowerball) < 27 and minPowerball[picks-1] == minPowerball[picks]):
+            picks+=1
+            self.optPowerball = minPowerball[:picks]
+        return self.optPowerball
 
     def pickDrawing(self):#tally of least 5 picked balls
         tally = self.histBallCount
@@ -47,8 +68,9 @@ def main():
     print('Your calculation for generating wins is running.')
     lottery = lotteryDatabase()
     tally = open('powerball.txt','r')
-    tallyList = lottery.genHistDraw(tally)
+    lottery.genHistDraw(tally)
     print ('These are your suggested balls :with tally', lottery.pickDrawing())
+    print ('These are your suggested powerballs:', lottery.pickPowerball())
     draws = open('tickets.txt','r')
 '''
 if __name__ == 'main':
