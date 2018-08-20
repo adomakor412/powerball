@@ -32,15 +32,16 @@ class lotteryDatabase:
     def pickPowerball(self):
             
         tally = self.histPowerballCount
-        minPowerball = [0]*26
-        
+        minPowerball = []
+        minPBCount = []
         for index in range(26):       
             ballCount = min(tally)
-            minPowerball[index] = tally.index(ballCount)+1
+            minPBCount.append(ballCount)
+            minPowerball.append({tally.index(ballCount)+1: ballCount})
             tally[tally.index(ballCount)] = 1000 #place holder assuming each tally <1000
-        picks = 2
+        picks = 3
         self.optPowerball = minPowerball[:picks]
-        while (len(self.optPowerball) < 27 and minPowerball[picks-1] == minPowerball[picks]):
+        while (len(self.optPowerball) < 27 and minPBCount[picks-1] == minPBCount[picks]):
             picks+=1
             self.optPowerball = minPowerball[:picks]
         return self.optPowerball
@@ -70,7 +71,7 @@ def main():
     tally = open('powerball.txt','r')
     lottery.genHistDraw(tally)
     print ('These are your suggested balls :with tally', lottery.pickDrawing())
-    print ('These are your suggested powerballs:', lottery.pickPowerball())
+    print ('These are your suggested power balls: with tally', lottery.pickPowerball())
     draws = open('tickets.txt','r')
 '''
 if __name__ == 'main':
