@@ -11,3 +11,6 @@ Is the list of chosen numbers at no specific date.
 POWERBALL.txt
 Is the list of drawings for the game 5/69 
 
+Assumption vs. Gambler's fallacy
+For fair draws, the histogram should be uniform. For an infinite number of draws we approach a uniform distribution. A finite method suggests playing tickets that are under the average tally in the histogram to even out the chart to be uniform.
+
